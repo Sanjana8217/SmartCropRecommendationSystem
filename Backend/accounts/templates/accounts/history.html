@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Prediction History</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#eef5ee;
+}
+
+.header{
+    background:linear-gradient(135deg,#2e7d32,#43a047);
+    color:white;
+    text-align:center;
+    padding:25px;
+}
+
+.header h1{
+    font-size:35px;
+}
+
+.header p{
+    margin-top:8px;
+}
+
+.top-buttons{
+    text-align:center;
+    margin:25px 0;
+}
+
+.top-buttons a{
+    text-decoration:none;
+}
+
+.top-btn{
+    background:#2e7d32;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:8px;
+    margin:5px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+.top-btn:hover{
+    background:#1b5e20;
+}
+
+.stats{
+    text-align:center;
+    margin-bottom:20px;
+    font-size:20px;
+    font-weight:bold;
+    color:#2e7d32;
+}
+
+.search-box{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.search-box input{
+    width:350px;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:16px;
+}
+
+.table-container{
+    width:98%;
+    margin:auto;
+    overflow-x:auto;
+    margin-bottom:30px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+    box-shadow:0px 0px 15px rgba(0,0,0,0.15);
+}
+
+th{
+    background:#2e7d32;
+    color:white;
+    padding:12px;
+}
+
+td{
+    padding:10px;
+    border:1px solid #ddd;
+    text-align:center;
+}
+
+tr:nth-child(even){
+    background:#f7f7f7;
+}
+
+tr:hover{
+    background:#e8f5e9;
+}
+
+.delete-btn{
+    background:red;
+    color:white;
+    border:none;
+    padding:8px 15px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.delete-btn:hover{
+    background:darkred;
+}
+
+.footer{
+    text-align:center;
+    padding:20px;
+    color:#666;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+    <h1>📋 Prediction History</h1>
+    <p>Smart Crop Recommendation System</p>
+</div>
+
+<div class="top-buttons">
+
+    <a href="/crop/">
+        <button class="top-btn">
+            🌾 New Prediction
+        </button>
+    </a>
+
+    <a href="/dashboard/">
+        <button class="top-btn">
+            📊 Dashboard
+        </button>
+    </a>
+
+    <a href="/excel/">
+        <button class="top-btn">
+            📥 Download Excel
+        </button>
+    </a>
+
+</div>
+
+<div class="stats">
+    Total Records : {{ predictions|length }}
+</div>
+
+<div class="search-box">
+    <input
+        type="text"
+        id="searchInput"
+        placeholder="Search Crop Name..."
+        onkeyup="searchTable()"
+    >
+</div>
+
+<div class="table-container">
+
+<table id="historyTable">
+
+<tr>
+    <th>Crop</th>
+    <th>Fertilizer</th>
+    <th>N</th>
+    <th>P</th>
+    <th>K</th>
+    <th>Temperature</th>
+    <th>Humidity</th>
+    <th>pH</th>
+    <th>Rainfall</th>
+    <th>Date</th>
+    <th>Action</th>
+</tr>
+
+{% for p in predictions %}
+
+<tr>
+
+    <td>{{ p.crop|title }}</td>
+    <td>{{ p.fertilizer }}</td>
+    <td>{{ p.nitrogen }}</td>
+    <td>{{ p.phosphorus }}</td>
+    <td>{{ p.potassium }}</td>
+    <td>{{ p.temperature }}</td>
+    <td>{{ p.humidity }}</td>
+    <td>{{ p.ph }}</td>
+    <td>{{ p.rainfall }}</td>
+    <td>{{ p.created_at }}</td>
+
+    <td>
+
+        <a href="/delete/{{ p.id }}/"
+           onclick="return confirm('Delete this prediction?')">
+
+            <button class="delete-btn">
+                Delete
+            </button>
+
+        </a>
+
+    </td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+
+<td colspan="11">
+    No Predictions Available
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+<div class="footer">
+    Smart Crop Recommendation System © 2025
+</div>
+
+<script>
+
+function searchTable() {
+
+    let input =
+        document.getElementById("searchInput");
+
+    let filter =
+        input.value.toUpperCase();
+
+    let table =
+        document.getElementById("historyTable");
+
+    let tr =
+        table.getElementsByTagName("tr");
+
+    for(let i=1;i<tr.length;i++){
+
+        let td =
+            tr[i].getElementsByTagName("td")[0];
+
+        if(td){
+
+            let txtValue =
+                td.textContent || td.innerText;
+
+            if(
+                txtValue.toUpperCase()
+                .indexOf(filter) > -1
+            ){
+                tr[i].style.display = "";
+            }
+            else{
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
+
+</script>
+
+</body>
+</html>

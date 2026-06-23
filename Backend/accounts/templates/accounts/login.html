@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Login - Smart Crop Recommendation System</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#eef5ee;
+}
+
+.header{
+background:linear-gradient(135deg,#2e7d32,#43a047);
+color:white;
+text-align:center;
+padding:25px;
+}
+
+.header h1{
+font-size:42px;
+}
+
+.container{
+width:420px;
+margin:60px auto;
+}
+
+.login-box{
+background:white;
+padding:35px;
+border-radius:15px;
+box-shadow:0px 0px 15px rgba(0,0,0,0.15);
+text-align:center;
+}
+
+.login-box h2{
+color:#2e7d32;
+margin-bottom:25px;
+font-size:34px;
+}
+
+input{
+width:100%;
+padding:14px;
+margin:10px 0;
+border:1px solid #ccc;
+border-radius:8px;
+font-size:18px;
+}
+
+button{
+width:100%;
+background:#2e7d32;
+color:white;
+border:none;
+padding:14px;
+border-radius:8px;
+font-size:20px;
+cursor:pointer;
+}
+
+button:hover{
+background:#1b5e20;
+}
+
+.register-link{
+margin-top:25px;
+font-size:18px;
+}
+
+.register-link a{
+color:#2e7d32;
+text-decoration:none;
+font-weight:bold;
+}
+
+.error{
+color:red;
+font-size:18px;
+margin-bottom:15px;
+}
+
+.success{
+color:green;
+font-size:18px;
+margin-bottom:15px;
+}
+
+.home-btn{
+display:inline-block;
+margin-top:20px;
+padding:10px 20px;
+background:#43a047;
+color:white;
+text-decoration:none;
+border-radius:8px;
+font-size:18px;
+}
+
+.home-btn:hover{
+background:#2e7d32;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+<h1>🌾 Smart Crop Recommendation System</h1>
+</div>
+
+<div class="container">
+
+<div class="login-box">
+
+<h2>🔐 Farmer Login</h2>
+
+{% if error %}
+
+<div class="error">
+{{ error }}
+</div>
+{% endif %}
+
+{% if success %}
+
+<div class="success">
+{{ success }}
+</div>
+{% endif %}
+
+<form method="POST">
+
+{% csrf_token %}
+
+<input
+type="text"
+name="username"
+placeholder="Enter Username"
+required>
+
+<input
+type="password"
+name="password"
+placeholder="Enter Password"
+required>
+
+<button type="submit">
+Login
+</button>
+
+</form>
+
+<div class="register-link">
+
+<p>Don't have an account?</p>
+
+<br>
+
+<a href="/register/">
+Create Account
+</a>
+
+</div>
+
+<a href="/" class="home-btn">
+🏠 Home
+</a>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

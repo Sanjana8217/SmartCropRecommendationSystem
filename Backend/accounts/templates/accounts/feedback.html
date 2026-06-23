@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Feedback</title>
+
+<style>
+
+body{
+    background:#eef5ee;
+    font-family:Arial;
+}
+
+.container{
+    width:600px;
+    margin:50px auto;
+}
+
+.card{
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0px 0px 15px rgba(0,0,0,0.15);
+}
+
+h1{
+    text-align:center;
+    color:#2e7d32;
+}
+
+select,
+textarea{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    margin-bottom:15px;
+}
+
+button{
+    background:#2e7d32;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.success{
+    color:green;
+    font-weight:bold;
+    margin-bottom:15px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+
+<h1>⭐ Feedback & Rating</h1>
+
+{% if message %}
+<div class="success">
+{{ message }}
+</div>
+{% endif %}
+
+<form method="POST">
+
+{% csrf_token %}
+
+<label>Rating</label>
+
+<select name="rating">
+
+<option value="5">⭐⭐⭐⭐⭐</option>
+<option value="4">⭐⭐⭐⭐</option>
+<option value="3">⭐⭐⭐</option>
+<option value="2">⭐⭐</option>
+<option value="1">⭐</option>
+
+</select>
+
+<label>Feedback</label>
+
+<textarea
+name="feedback"
+rows="6"
+required></textarea>
+
+<button type="submit">
+Submit Feedback
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

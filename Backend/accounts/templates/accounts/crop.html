@@ -1,0 +1,357 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Smart Crop Recommendation System</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#eef5ee;
+}
+
+.header{
+    background:linear-gradient(135deg,#2e7d32,#43a047);
+    color:white;
+    text-align:center;
+    padding:25px;
+}
+
+.header h1{
+    font-size:35px;
+}
+
+.header p{
+    margin-top:8px;
+}
+
+.container{
+    width:90%;
+    max-width:900px;
+    margin:25px auto;
+}
+
+.form-box{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0px 0px 15px rgba(0,0,0,0.15);
+    text-align:center;
+}
+
+.form-box h2{
+    color:#2e7d32;
+    margin-bottom:20px;
+}
+
+input{
+    width:90%;
+    padding:12px;
+    margin:8px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:16px;
+}
+
+.predict-btn{
+    background:#2e7d32;
+    color:white;
+    border:none;
+    padding:12px 25px;
+    border-radius:8px;
+    font-size:18px;
+    cursor:pointer;
+}
+
+.predict-btn:hover{
+    background:#1b5e20;
+}
+
+.nav-buttons{
+    text-align:center;
+    margin-top:20px;
+}
+
+.nav-buttons a{
+    text-decoration:none;
+}
+
+.nav-buttons button{
+    background:#2e7d32;
+    color:white;
+    border:none;
+    padding:10px 18px;
+    border-radius:8px;
+    margin:5px;
+    cursor:pointer;
+}
+
+.nav-buttons button:hover{
+    background:#1b5e20;
+}
+
+.result-box{
+    margin-top:30px;
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0px 0px 15px rgba(0,0,0,0.15);
+    text-align:center;
+}
+
+.result-title{
+    color:#2e7d32;
+    font-size:28px;
+    font-weight:bold;
+}
+
+.crop-image{
+    width:280px;
+    height:200px;
+    object-fit:cover;
+    border-radius:12px;
+    margin-top:15px;
+    box-shadow:0px 0px 10px gray;
+}
+
+.section{
+    margin-top:25px;
+}
+
+.section h2{
+    color:#2e7d32;
+    margin-bottom:10px;
+}
+
+.info{
+    font-size:20px;
+    font-weight:bold;
+    color:#333;
+}
+
+.weather-card{
+    background:#f5f5f5;
+    margin:10px;
+    padding:12px;
+    border-radius:10px;
+}
+
+.forecast-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:10px;
+}
+
+.download-buttons{
+    margin-top:20px;
+}
+
+.download-buttons button{
+    background:#2e7d32;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:8px;
+    margin:5px;
+    cursor:pointer;
+}
+
+.download-buttons button:hover{
+    background:#1b5e20;
+}
+
+.error{
+    color:red;
+    font-weight:bold;
+    margin-top:15px;
+}
+
+.footer{
+    text-align:center;
+    padding:20px;
+    color:#666;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+    <h1>🌾 Smart Crop Recommendation System</h1>
+    <p>AI Based Crop Prediction Using Machine Learning</p>
+</div>
+
+<div class="container">
+
+<div class="form-box">
+
+<h2>🌱 Enter Crop Details</h2>
+
+<form method="POST">
+
+{% csrf_token %}
+
+<input type="number" step="any" name="N" placeholder="Nitrogen" required>
+
+<input type="number" step="any" name="P" placeholder="Phosphorus" required>
+
+<input type="number" step="any" name="K" placeholder="Potassium" required>
+
+<input type="text" name="city" placeholder="Enter City Name" required>
+
+<input type="number" step="any" name="ph" placeholder="pH Value" required>
+
+<input type="number" step="any" name="rainfall" placeholder="Rainfall" required>
+
+<br><br>
+
+<button class="predict-btn" type="submit">
+🌱 Predict Crop
+</button>
+
+</form>
+
+<div class="nav-buttons">
+
+<a href="/dashboard/">
+<button type="button">📊 Dashboard</button>
+</a>
+
+<a href="/history/">
+<button type="button">📋 History</button>
+</a>
+<a href="/feedback/">
+<button type="button">
+⭐ Feedback
+</button>
+</a>
+
+</div>
+
+{% if error %}
+
+<div class="error">
+{{ error }}
+</div>
+{% endif %}
+
+</div>
+
+{% if result %}
+
+<div class="result-box">
+
+<h2>🌾 Recommended Crop</h2>
+
+<div class="result-title">
+{{ result|title }}
+</div>
+
+<img
+src="{% static 'images/' %}{{ crop_image }}"
+class="crop-image"
+alt="{{ result }}">
+
+<div class="section">
+<h2>🌡 Weather Information</h2>
+
+<div class="info">
+Temperature : {{ temperature }} °C
+</div>
+
+<br>
+
+<div class="info">
+Humidity : {{ humidity }} %
+</div>
+</div>
+
+<div class="section">
+<h2>📅 Weather Forecast</h2>
+
+<div class="forecast-grid">
+
+{% for day in forecast_data %}
+
+<div class="weather-card">
+<b>{{ day.date }}</b>
+<br><br>
+🌡 {{ day.temp }} °C
+</div>
+
+{% endfor %}
+
+</div>
+</div>
+
+<div class="section">
+<h2>📈 Estimated Yield</h2>
+<div class="info">{{ estimated_yield }}</div>
+</div>
+
+<div class="section">
+<h2>🧪 Suggested Fertilizer</h2>
+<div class="info">{{ fertilizer }}</div>
+</div>
+
+<div class="section">
+<h2>📅 Growing Season</h2>
+<div class="info">{{ crop_info.season }}</div>
+</div>
+
+<div class="section">
+<h2>🌱 Suitable Soil</h2>
+<div class="info">{{ crop_info.soil }}</div>
+</div>
+
+<div class="section">
+<h2>💧 Water Requirement</h2>
+<div class="info">{{ crop_info.water }}</div>
+</div>
+
+<div class="section">
+<h2>⏳ Crop Duration</h2>
+<div class="info">{{ crop_info.duration }}</div>
+</div>
+
+<div class="download-buttons">
+
+<a href="/report/">
+<button type="button">
+📄 Download PDF Report
+</button>
+</a>
+
+<a href="/export-excel/">
+</a><button type="button">
+📊 Download Excel Report
+</button>
+</a>
+
+</div>
+
+</div>
+
+{% endif %}
+
+</div>
+
+<div class="footer">
+Smart Crop Recommendation System © 2025
+</div>
+
+</body>
+</html>

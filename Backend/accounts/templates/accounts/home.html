@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Smart Crop Recommendation System</title>
+
+<style>
+
+body{
+background:#e8f5e9;
+font-family:Arial;
+text-align:center;
+margin:0;
+padding:0;
+}
+
+.header{
+background:linear-gradient(135deg,#2e7d32,#43a047);
+padding:30px;
+color:white;
+}
+
+.header h1{
+font-size:50px;
+margin:0;
+}
+
+.header p{
+font-size:22px;
+}
+
+.container{
+margin-top:50px;
+}
+
+.card{
+width:70%;
+margin:auto;
+background:white;
+padding:30px;
+border-radius:15px;
+box-shadow:0px 0px 15px rgba(0,0,0,0.15);
+}
+
+h2{
+color:#2e7d32;
+}
+
+p{
+font-size:22px;
+}
+
+button{
+background:green;
+color:white;
+padding:12px 25px;
+border:none;
+margin:10px;
+font-size:18px;
+border-radius:8px;
+cursor:pointer;
+}
+
+button:hover{
+background:darkgreen;
+}
+
+.user-box{
+background:#f1f8e9;
+padding:15px;
+margin-top:20px;
+border-radius:10px;
+font-size:20px;
+font-weight:bold;
+color:#2e7d32;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<h1>🌾 Smart Crop Recommendation System</h1>
+
+<p>AI Powered Agriculture Platform</p>
+
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<h2>Grow Better • Farm Smarter • Harvest More</h2>
+
+<br>
+
+{% if user.is_authenticated %}
+
+<div class="user-box">
+👨‍🌾 Welcome {{ user.username }}
+</div>
+
+<br>
+
+<a href="/crop/">
+<button>🌱 Crop Recommendation</button>
+</a>
+
+<a href="/dashboard/">
+<button>📊 Dashboard</button>
+</a>
+
+<a href="/history/">
+<button>📋 History</button>
+</a>
+
+<a href="/export-excel/">
+<button>📥 Excel Report</button>
+</a>
+
+<a href="/logout/">
+<button>🚪 Logout</button>
+</a>
+
+{% else %}
+
+<a href="/login/">
+<button>🔐 Login</button>
+</a>
+
+<a href="/register/">
+<button>📝 Register</button>
+</a>
+
+{% endif %}
+
+</div>
+
+</div>
+
+</body>
+
+</html>

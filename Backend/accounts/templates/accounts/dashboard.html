@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Smart Crop Recommendation Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#eef5ee;
+}
+
+.header{
+    background:linear-gradient(135deg,#2e7d32,#43a047);
+    color:white;
+    text-align:center;
+    padding:25px;
+    box-shadow:0px 3px 10px rgba(0,0,0,0.2);
+}
+
+.header h1{
+    font-size:35px;
+}
+
+.header p{
+    margin-top:8px;
+    font-size:18px;
+}
+
+.container{
+    width:95%;
+    margin:auto;
+    padding:20px;
+}
+
+.cards{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:20px;
+}
+
+.card{
+    background:white;
+    width:260px;
+    padding:25px;
+    border-radius:15px;
+    text-align:center;
+    box-shadow:0px 0px 15px rgba(0,0,0,0.15);
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+}
+
+.card h2{
+    color:#2e7d32;
+    margin-bottom:10px;
+}
+
+.card p{
+    font-size:30px;
+    font-weight:bold;
+    color:#333;
+}
+
+.chart-box{
+    background:white;
+    margin-top:30px;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0px 0px 15px rgba(0,0,0,0.15);
+}
+
+.chart-title{
+    text-align:center;
+    color:#2e7d32;
+    margin-bottom:20px;
+}
+
+.chart-container{
+    width:90%;
+    margin:auto;
+}
+
+.pie-container{
+    width:350px;
+    margin:40px auto;
+}
+
+.buttons{
+    text-align:center;
+    margin-top:30px;
+    margin-bottom:30px;
+}
+
+.buttons a{
+    text-decoration:none;
+}
+
+.buttons button{
+    background:#2e7d32;
+    color:white;
+    border:none;
+    padding:12px 25px;
+    margin:10px;
+    border-radius:10px;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.buttons button:hover{
+    background:#1b5e20;
+}
+
+.footer{
+    text-align:center;
+    padding:15px;
+    color:#666;
+}
+
+@media(max-width:768px){
+
+    .cards{
+        flex-direction:column;
+        align-items:center;
+    }
+
+    .card{
+        width:90%;
+    }
+
+    .pie-container{
+        width:90%;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+    <h1>🌾 Smart Crop Recommendation Dashboard</h1>
+    <p>AI Powered Crop Prediction Analytics</p>
+</div>
+
+<div class="container">
+
+    <div class="cards">
+
+        <div class="card">
+            <h2>📊 Total Predictions</h2>
+            <p>{{ total_predictions }}</p>
+        </div>
+
+        <div class="card">
+            <h2>🌱 Latest Crop</h2>
+            <p>
+            {% if latest_prediction %}
+                {{ latest_prediction.crop|title }}
+            {% else %}
+                No Data
+            {% endif %}
+            </p>
+        </div>
+
+        <div class="card">
+            <h2>🏆 Most Predicted Crop</h2>
+            <p>
+            {% if most_predicted_crop %}
+                {{ most_predicted_crop|title }}
+            {% else %}
+                No Data
+            {% endif %}
+            </p>
+        </div>
+
+        <div class="card">
+            <h2>🌾 Crop Types</h2>
+            <p>{{ total_crop_types }}</p>
+        </div>
+
+    </div>
+    <div class="card">
+<h2>Total Feedbacks</h2>
+<h1>{{ total_feedbacks }}</h1>
+</div>
+
+<div class="card">
+<h2>Average Rating</h2>
+<h1>{{ avg_rating }}/5 ⭐</h1>
+</div>
+
+    <div class="chart-box">
+
+        <h2 class="chart-title">
+            📈 Crop Prediction Analytics
+        </h2>
+
+        <div class="chart-container">
+            <canvas id="cropChart"></canvas>
+        </div>
+
+        <h2 class="chart-title" style="margin-top:40px;">
+            🥧 Crop Distribution
+        </h2>
+
+        <div class="pie-container">
+            <canvas id="pieChart"></canvas>
+        </div>
+
+    </div>
+
+    <div class="buttons">
+
+        <a href="/crop/">
+            <button>🌱 New Prediction</button>
+        </a>
+
+        <a href="/history/">
+            <button>📋 Prediction History</button>
+        </a>
+
+        <a href="/">
+            <button>🏠 Home</button>
+        </a>
+
+    </div>
+
+</div>
+
+<div class="footer">
+    Smart Crop Recommendation System © 2025
+</div>
+
+<script>
+
+new Chart(document.getElementById("cropChart"), {
+    type: "bar",
+    data: {
+        labels: {{ crop_names|safe }},
+        datasets: [{
+            label: "Predictions",
+            data: {{ crop_counts|safe }},
+            backgroundColor: [
+                "#4CAF50",
+                "#2196F3",
+                "#FF9800",
+                "#9C27B0",
+                "#F44336",
+                "#00BCD4",
+                "#8BC34A",
+                "#FFC107"
+            ]
+        }]
+    },
+    options: {
+        responsive:true,
+        scales:{
+            y:{
+                beginAtZero:true
+            }
+        }
+    }
+});
+
+new Chart(document.getElementById("pieChart"), {
+    type:"pie",
+    data:{
+        labels: {{ crop_names|safe }},
+        datasets:[{
+            data: {{ crop_counts|safe }},
+            backgroundColor:[
+                "#4CAF50",
+                "#2196F3",
+                "#FF9800",
+                "#9C27B0",
+                "#F44336",
+                "#00BCD4",
+                "#8BC34A",
+                "#FFC107"
+            ]
+        }]
+    },
+    options:{
+        responsive:true
+    }
+});
+
+</script>
+
+</body>
+</html>

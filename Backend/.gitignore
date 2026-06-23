@@ -1,0 +1,10 @@
+PlantVillage/
+venv/
+
+__pycache__/
+*.pyc
+
+smartcrop/__pycache__/
+
+temp_leaf.jpg
+db.sqlite3
