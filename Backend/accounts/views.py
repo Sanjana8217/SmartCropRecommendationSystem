@@ -1,6 +1,4 @@
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing import image
-import numpy as np
+
 import pickle
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
@@ -41,6 +39,8 @@ def get_disease_model():
     global disease_model
 
     if disease_model is None:
+        from tensorflow.keras.models import load_model
+
         disease_model = load_model(
             os.path.join(BASE_DIR, "disease_model.keras")
         )
@@ -494,6 +494,9 @@ def export_excel(request):
     return response
 @login_required(login_url="/login/")
 def disease_detection(request):
+    from tensorflow.keras.models import load_model
+    from tensorflow.keras.preprocessing import image
+    import numpy as np
 
     prediction = ""
     treatment = ""
@@ -529,7 +532,7 @@ def disease_detection(request):
         model = get_disease_model()
 
         result = model.predict(img_array)
-        
+
         disease_class = class_names[np.argmax(result)]
 
         disease_info = {
