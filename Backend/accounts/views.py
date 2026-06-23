@@ -35,9 +35,17 @@ model_path = os.path.join(
 model = joblib.load(model_path)
 # Disease Model
 
-disease_model = load_model(
-    os.path.join(BASE_DIR, "disease_model.keras")
-)
+disease_model = None
+
+def get_disease_model():
+    global disease_model
+
+    if disease_model is None:
+        disease_model = load_model(
+            os.path.join(BASE_DIR, "disease_model.keras")
+        )
+
+    return disease_model
 
 with open(
     os.path.join(BASE_DIR, "class_names.pkl"),
@@ -518,8 +526,10 @@ def disease_detection(request):
             axis=0
         )
 
-        result = disease_model.predict(img_array)
+        model = get_disease_model()
 
+        result = model.predict(img_array)
+        
         disease_class = class_names[np.argmax(result)]
 
         disease_info = {
