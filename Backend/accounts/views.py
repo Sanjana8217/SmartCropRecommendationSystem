@@ -614,22 +614,25 @@ def crop(request):
             crop=result,
             fertilizer=fertilizer
         )
-        send_mail(
-    subject="Smart Crop Recommendation Result",
-    message=f"""
-Recommended Crop : {result}
+        try:
+            send_mail(
+            subject="Smart Crop Recommendation Result",
+            message=f"""
+        Recommended Crop : {result}
 
-Suggested Fertilizer : {fertilizer}
+        Suggested Fertilizer : {fertilizer}
 
-Temperature : {temperature} °C
-Humidity : {humidity} %
+        Temperature : {temperature} °C
+        Humidity : {humidity} %
 
-Estimated Yield : {estimated_yield}
-""",
-    from_email=settings.EMAIL_HOST_USER,
-    recipient_list=[request.user.email],
-    fail_silently=False,
-)
+        Estimated Yield : {estimated_yield}
+        """,
+             from_email=settings.EMAIL_HOST_USER,
+             recipient_list=[request.user.email],
+            fail_silently=False,
+        )
+        except Exception:
+            pass
 
     return render(
         request,
