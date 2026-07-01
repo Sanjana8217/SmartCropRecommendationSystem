@@ -119,7 +119,22 @@ required>
 <h2>Prediction Result</h2>
 
 <h3>{{ prediction }}</h3>
+<h3 style="color:green;">
+⭐ Confidence :
+{{ confidence }} %
+</h3>
 
+{% if image_path %}
+
+<img
+src="{{ image_path }}"
+style="
+width:250px;
+margin-top:15px;
+border-radius:10px;
+box-shadow:0 0 10px gray;">
+
+{% endif %}
 <br>
 
 <p>
@@ -128,6 +143,31 @@ required>
 
 <p>
 {{ treatment }}
+<br><br>
+
+<h3>
+🛡 Prevention
+</h3>
+
+<p>
+
+{{ prevention }}
+
+</p>
+
+<br>
+
+<h3>
+
+🧪 Recommended Fungicide
+
+</h3>
+
+<p>
+
+{{ fungicide }}
+
+</p>
 </p>
 
 </div>

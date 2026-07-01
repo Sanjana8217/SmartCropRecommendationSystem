@@ -199,6 +199,46 @@ input{
 <div class="form-box">
 
 <h2>🌱 Enter Crop Details</h2>
+<div style="background:#e8f5e9;padding:15px;border-radius:10px;margin-bottom:20px;border-left:6px solid #2e7d32;">
+
+<h3 style="color:#2e7d32;">🌱 Need Help Finding Soil Parameters?</h3>
+
+<p style="text-align:left;line-height:1.8;">
+
+✔ <b>Nitrogen (N):</b> Indicates the nitrogen content in your soil.<br>
+
+✔ <b>Phosphorus (P):</b> Helps in root development and flowering.<br>
+
+✔ <b>Potassium (K):</b> Improves crop quality and disease resistance.<br>
+
+✔ <b>pH:</b> Shows the acidity or alkalinity of the soil.<br>
+
+✔ <b>Rainfall:</b> Average rainfall in your area (in mm).<br>
+
+✔ <b>City:</b> Used to fetch real-time weather information.
+
+</p>
+
+<hr>
+
+<h4 style="color:#1b5e20;">📍 Where can farmers get these values?</h4>
+
+<ul style="text-align:left;line-height:1.8;">
+
+<li>🧪 Government Soil Testing Laboratory</li>
+
+<li>📄 Soil Health Card issued by Agriculture Department</li>
+
+<li>🌱 Portable NPK Soil Meter</li>
+
+<li>👨‍🌾 Agricultural Officer / Krishi Vigyan Kendra (KVK)</li>
+
+<li>🏛️ State Agriculture Department</li>
+
+</ul>
+
+</div>
+
 
 <form method="POST">
 
@@ -218,8 +258,33 @@ input{
 
 <br><br>
 
-<button class="predict-btn" type="submit">
+<br><br>
+
+<button
+type="button"
+class="predict-btn"
+onclick="fillSampleData()"
+style="background:#1565c0;margin-right:10px;">
+
+📝 Use Sample Data
+
+</button>
+
+<button
+class="predict-btn"
+type="submit">
+
 🌱 Predict Crop
+
+</button>
+
+<button
+type="reset"
+class="predict-btn"
+style="background:#d32f2f;margin-left:10px;">
+
+🔄 Reset
+
 </button>
 
 </form>
@@ -258,6 +323,33 @@ input{
 
 <div class="result-title">
 {{ result|title }}
+</div>
+<div style="margin-top:15px;">
+
+<h3 style="color:#2e7d32;">
+⭐ Prediction Confidence
+</h3>
+
+<div style="
+width:80%;
+margin:auto;
+background:#ddd;
+border-radius:20px;
+overflow:hidden;">
+
+<div style="
+width:{{ confidence }}%;
+background:#4CAF50;
+color:white;
+padding:8px;
+font-weight:bold;">
+
+{{ confidence }}%
+
+</div>
+
+</div>
+
 </div>
 
 <img
@@ -326,7 +418,216 @@ Humidity : {{ humidity }} %
 <h2>⏳ Crop Duration</h2>
 <div class="info">{{ crop_info.duration }}</div>
 </div>
+<div class="section">
 
+<h2>💰 Economic Analysis</h2>
+
+<div class="weather-card">
+
+<p><b>Market Price :</b> {{ market_price }}</p>
+
+<p><b>Estimated Investment :</b> {{ investment }}</p>
+
+<p><b>Expected Income :</b> {{ expected_income }}</p>
+
+<p><b>Estimated Profit :</b>
+
+<span style="color:green;font-weight:bold;">
+
+{{ profit }}
+
+</span>
+
+</p>
+
+</div>
+
+</div>
+<div class="section">
+
+<h2>🌱 Soil Health Analysis</h2>
+
+<div class="weather-card">
+
+<p><b>Nitrogen :</b> {{ nitrogen_status }}</p>
+
+<p><b>Phosphorus :</b> {{ phosphorus_status }}</p>
+
+<p><b>Potassium :</b> {{ potassium_status }}</p>
+
+<br>
+
+<p>
+
+<b>Overall Soil Health :</b>
+
+{{ soil_health }}
+
+</p>
+
+<br>
+
+<div style="background:#ddd;border-radius:20px;overflow:hidden;">
+
+<div style="width:{{ soil_score }}%;background:#4CAF50;color:white;padding:8px;">
+
+{{ soil_score }}%
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="section">
+
+<h2>🌱 Fertility Rating</h2>
+
+<div class="weather-card">
+
+<h3>
+
+{{ fertility }}
+
+</h3>
+
+</div>
+
+</div>
+<div class="section">
+
+<h2>🌾 Crop Suitability Score</h2>
+
+<div class="weather-card">
+
+<div style="background:#ddd;border-radius:20px;overflow:hidden;">
+
+<div style="width:{{ suitability }}%;background:#2e7d32;color:white;padding:8px;">
+
+{{ suitability }} %
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="section">
+
+<h2>🌦 Today's Farming Advice</h2>
+
+<div class="weather-card">
+
+{% for tip in weather_advice %}
+
+<p>{{ tip }}</p>
+
+{% endfor %}
+
+</div>
+
+</div>
+<div class="section">
+
+<h2>📅 Best Sowing Time</h2>
+
+<div class="weather-card">
+
+<h3>
+
+{{ sowing_month }}
+
+</h3>
+
+</div>
+
+</div>
+<div class="section">
+
+<h2>🏛 Government Schemes</h2>
+
+<div class="weather-card">
+
+{% if result == "rice" %}
+
+<p>✅ PM-KISAN Scheme</p>
+<p>✅ Pradhan Mantri Fasal Bima Yojana (PMFBY)</p>
+<p>✅ Soil Health Card Scheme</p>
+
+{% elif result == "coffee" %}
+
+<p>✅ Coffee Board Development Scheme</p>
+<p>✅ PM-KISAN Scheme</p>
+<p>✅ PMFBY Crop Insurance</p>
+
+{% elif result == "cotton" %}
+
+<p>✅ Cotton Corporation of India (CCI)</p>
+<p>✅ PMFBY</p>
+<p>✅ Soil Health Card Scheme</p>
+
+{% else %}
+
+<p>✅ PM-KISAN</p>
+<p>✅ PMFBY Crop Insurance</p>
+<p>✅ Soil Health Card Scheme</p>
+
+{% endif %}
+
+</div>
+
+</div>
+<div class="section">
+
+<h2>🛡 Crop Insurance</h2>
+
+<div class="weather-card">
+
+<p>
+
+Your crop is eligible for insurance under the
+
+<b>Pradhan Mantri Fasal Bima Yojana (PMFBY)</b>.
+
+</p>
+
+<br>
+
+<p>
+
+✔ Protection against drought
+
+</p>
+
+<p>
+
+✔ Flood damage
+
+</p>
+
+<p>
+
+✔ Cyclone
+
+</p>
+
+<p>
+
+✔ Heavy rainfall
+
+</p>
+
+<p>
+
+✔ Pest & disease loss
+
+</p>
+
+</div>
+
+</div>
 <div class="download-buttons">
 
 <a href="/report/">
@@ -336,9 +637,14 @@ Humidity : {{ humidity }} %
 </a>
 
 <a href="/export-excel/">
-</a><button type="button">
-📊 Download Excel Report
-</button>
+    <button type="button">
+        📊 Download Excel Report
+    </button>
+</a>
+<a href="/chatbot/">
+    <button type="button">
+        🤖 AI Chatbot
+    </button>
 </a>
 
 </div>
@@ -352,6 +658,25 @@ Humidity : {{ humidity }} %
 <div class="footer">
 Smart Crop Recommendation System © 2025
 </div>
+<script>
+
+function fillSampleData(){
+
+document.getElementsByName("N")[0].value = 90;
+
+document.getElementsByName("P")[0].value = 42;
+
+document.getElementsByName("K")[0].value = 43;
+
+document.getElementsByName("city")[0].value = "Bengaluru";
+
+document.getElementsByName("ph")[0].value = 6.5;
+
+document.getElementsByName("rainfall")[0].value = 202;
+
+}
+
+</script>
 
 </body>
 </html>

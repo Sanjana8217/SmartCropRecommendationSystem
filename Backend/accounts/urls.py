@@ -43,5 +43,10 @@ urlpatterns = [
     views.feedback,
     name='feedback'
 ),
+path(
+    'chatbot/',
+    views.chatbot,
+    name='chatbot'
+),
 
 ]
