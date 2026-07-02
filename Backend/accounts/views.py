@@ -326,26 +326,46 @@ def crop(request):
 
             "apple":"December - February",
 
-            "jute":"March - May"
+            "jute":"March - May",
+            "wheat":"October - December",
+            "kidneybeans" : "October - November",
+            "pigeonpeas" : "May - July",
+            "pomegranate" : "June - August",
+            "papaya" : "June - July / Febrauary - March",
+            "watermelon" : "Janauary - March",
+            "Grapes" : "December - January",
+            "mothbeans" : "June - July",
+            "mungbean" : "March - April",
+            "muskmelon" : "Janauary - March",
+            "lentil" : "October - November"
+
+
 
 }.get(result.lower(),"Depends on Region")
         market_data = {
 
-            "rice": ("₹2,500 / Quintal", "₹30,000", "₹80,000"),
+               "rice": ("₹2,500 / Quintal", "₹30,000", "₹80,000"),
+                "maize": ("₹2,300 / Quintal", "₹28,000", "₹75,000"),
+                "banana": ("₹2,000 / Quintal", "₹80,000", "₹2,00,000"),
+                "coffee": ("₹9,000 / Quintal", "₹60,000", "₹2,00,000"),
+                "cotton": ("₹7,000 / Quintal", "₹40,000", "₹1,20,000"),
+                "mango": ("₹4,000 / Quintal", "₹50,000", "₹1,80,000"),
+                "orange": ("₹3,500 / Quintal", "₹45,000", "₹1,50,000"),
+                "jute": ("₹5,500 / Quintal", "₹35,000", "₹90,000"),
+                "chickpea": ("₹2,300 / Quintal", "₹28,000", "₹75,000"),
+                "coconut": ("₹2,800 / Quintal", "₹40,000", "₹1,00,000"),
+                "grapes": ("₹4,500 / Quintal", "₹60,000", "₹2,00,000"),
+                "kidneybeans": ("₹8,000 / Quintal", "₹35,000", "₹90,000"),
+                "lentil": ("₹7,000 / Quintal", "₹30,000", "₹80,000"),
+                "mothbeans": ("₹6,500 / Quintal", "₹28,000", "₹70,000"),
+                "mungbean": ("₹7,500 / Quintal", "₹30,000", "₹85,000"),
+                "muskmelon": ("₹2,500 / Quintal", "₹40,000", "₹1,20,000"),
+                "papaya": ("₹2,800 / Quintal", "₹45,000", "₹1,50,000"),
+                "pigeonpeas": ("₹7,000 / Quintal", "₹35,000", "₹90,000"),
+                "pomegranate": ("₹8,500 / Quintal", "₹60,000", "₹2,20,000"),
+                "watermelon": ("₹2,000 / Quintal", "₹35,000", "₹1,00,000"),
+                "wheat": ("₹2,400 / Quintal", "₹30,000", "₹80,000")
 
-            "maize": ("₹2,300 / Quintal", "₹28,000", "₹75,000"),
-
-            "banana": ("₹2,000 / Quintal", "₹80,000", "₹2,80,000"),
-
-             "coffee": ("₹9,000 / Quintal", "₹60,000", "₹2,00,000"),
-
-             "cotton": ("₹7,000 / Quintal", "₹40,000", "₹1,20,000"),
-
-            "mango": ("₹4,000 / Quintal", "₹50,000", "₹1,80,000"),
-
-            "orange": ("₹3,500 / Quintal", "₹45,000", "₹1,50,000"),
-
-            "jute": ("₹5,500 / Quintal", "₹35,000", "₹90,000")
 
             }
 
@@ -597,7 +617,20 @@ def crop(request):
             "cotton": "2.4 Tons/Acre",
             "coffee": "2.1 Tons/Acre",
             "mango": "8 Tons/Acre",
-            "orange": "10 Tons/Acre"
+            "orange": "10 Tons/Acre",
+            "jute": "2.8 Tons/Acre",
+            "chickpea": "1.5 Tons/Acre",
+            "coconut": "4 Tons/Acre",
+            "grapes": "10 Tons/Acre",
+            "kidneybeans": "1.8 Tons/Acre",
+            "lentil": "1.2 Tons/Acre",
+            "mothbeans": "1.1 Tons/Acre",
+            "mungbean": "1.3 Tons/Acre",
+            "muskmelon": "12 Tons/Acre",
+            "papaya": "20 Tons/Acre",
+            "pigeonpeas": "1.4 Tons/Acre",
+            "pomegranate": "8 Tons/Acre",
+            "watermelon": "15 Tons/Acre"
         }
 
         estimated_yield = crop_details[result.lower()]["yield"]
@@ -614,25 +647,25 @@ def crop(request):
             crop=result,
             fertilizer=fertilizer
         )
-        #try:
-             #send_mail(
-             #subject="Smart Crop Recommendation Result",
-             #message=f"""
-         #Recommended Crop : {result}
+        try:
+             send_mail(
+             subject="Smart Crop Recommendation Result",
+             message=f"""
+         Recommended Crop : {result}
 
-         #Suggested Fertilizer : {fertilizer}
+         Suggested Fertilizer : {fertilizer}
 
-         #Temperature : {temperature} °C
-         #Humidity : {humidity} %
+         Temperature : {temperature} °C
+         Humidity : {humidity} %
 
-         #Estimated Yield : {estimated_yield}
-         #""",
-              #from_email=settings.EMAIL_HOST_USER,
-              #recipient_list=[request.user.email],
-             #fail_silently=False,
-        # )
-         #except Exception:
-             #pass
+         Estimated Yield : {estimated_yield}
+         """,
+              from_email=settings.EMAIL_HOST_USER,
+              recipient_list=[request.user.email],
+              fail_silently=False,
+         )
+        except Exception:
+             pass
 
     return render(
         request,
